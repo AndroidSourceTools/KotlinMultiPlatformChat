@@ -1,3 +1,4 @@
 rootProject.name='KotlinMultiPlatformChat'
 include ':app'
 include ':SharedCode'
+include ':js'

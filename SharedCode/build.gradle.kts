@@ -4,6 +4,8 @@ plugins {
     kotlin("multiplatform")
 }
 
+val ktor_version = "1.3.2"
+
 kotlin {
     //select iOS target platform depending on the Xcode environment variables
     val iOSTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget =
@@ -22,12 +24,27 @@ kotlin {
 
     jvm("android")
 
+    js {
+        browser {  }
+    }
+
     sourceSets["commonMain"].dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-common")
+        implementation("io.ktor:ktor-client-core:$ktor_version")
     }
 
     sourceSets["androidMain"].dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib")
+        implementation("io.ktor:ktor-client-android:$ktor_version")
+    }
+
+    sourceSets["iosMain"].dependencies {
+        implementation("io.ktor:ktor-client-ios:$ktor_version")
+    }
+
+    sourceSets["jsMain"].dependencies {
+        implementation("io.ktor:ktor-client-js:$ktor_version")
+        implementation(kotlin("stdlib-js"))
     }
 }
 

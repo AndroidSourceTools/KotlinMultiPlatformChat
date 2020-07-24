@@ -6,4 +6,4 @@ package space.siy.kotlinmultiplatformchat
 
 expect fun platformName(): String
 
-fun createApplicationScreenMessage() = "Kotlin Rocks on ${platformName()}"
+fun createApplicationScreenMessage() = "Kotlin on ${platformName()}"
