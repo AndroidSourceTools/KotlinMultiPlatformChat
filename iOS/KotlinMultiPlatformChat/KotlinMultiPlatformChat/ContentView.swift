@@ -9,9 +9,21 @@
 import SwiftUI
 import SharedCode
 
+final class Result: ObservableObject {
+    @Published var result: String = "loading"
+    func load() {
+        CommonKt.fetchRemoteMessage { (res: String) in
+            self.result = res
+        }
+    }
+}
+
 struct ContentView: View {
+    @ObservedObject var data = Result()
     var body: some View {
-        Text(CommonKt.createApplicationScreenMessage())
+        Text(data.result).onAppear {
+            self.data.load()
+        }
     }
 }
 
