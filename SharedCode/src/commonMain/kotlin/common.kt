@@ -16,6 +16,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.receiveOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
 
 expect fun platformName(): String
 
@@ -36,32 +38,36 @@ fun fetchRemoteMessage(done: (res: String) -> Unit) {
     }
 }
 
-class ChatService(val url: String) {
-    data class Message(val user: String, val content: String)
+@Serializable
+data class Message(val user: String, val content: String)
 
-    val client = HttpClient {
-        install(WebSockets)
-    }
+expect class Sender(host: String, port: Int) {
+    var onMessage: (suspend (Message) -> Unit)?
+    var onReady: (suspend () -> Unit)?
+    fun setup()
+    fun send(msg: Message)
+}
+
+class ChatService(val host: String, val port: Int, val name: String) {
+
+    val sender = Sender(host, port)
 
     var onMessage: ((msg: Message) -> Unit)? = null
+    var onReady: (() -> Unit)? = null
 
     fun connect() {
-        GlobalScope.launch(ioDispatcher()) {
-            client.ws(url) {
-                outgoing.send(Frame.Text("hello"))
-                while(true) {
-                    val frame = incoming.receiveOrNull() ?: break
-                    when(frame) {
-                        is Frame.Text -> {
-                            val text = frame.readText().split(" ")
-                            withContext(mainDispatcher()) {
-                                onMessage?.invoke(Message(text[0], text[1]))
-                            }
-                        }
-                        else -> {}
-                    }
-                }
-            }
+        sender.onMessage = {
+            withContext(mainDispatcher()) { onMessage?.invoke(it) }
         }
+
+        sender.onReady = {
+            withContext(mainDispatcher()) { onReady?.invoke()}
+        }
+        sender.setup()
+    }
+
+    @ImplicitReflectionSerializer
+    fun send(msg: String) {
+        sender.send(Message(name, msg))
     }
 }

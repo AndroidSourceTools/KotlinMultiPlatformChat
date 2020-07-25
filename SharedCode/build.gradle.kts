@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization")
 }
 
 val ktor_version = "1.3.2"
@@ -33,6 +34,9 @@ kotlin {
         implementation("io.ktor:ktor-client-core:$ktor_version")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8")
         implementation("io.ktor:ktor-client-websockets:$ktor_version")
+        implementation ("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.20.0")
+        implementation("io.ktor:ktor-client-json:$ktor_version")
+        implementation("io.ktor:ktor-client-serialization:$ktor_version")
     }
 
     sourceSets["androidMain"].dependencies {
@@ -41,12 +45,18 @@ kotlin {
         implementation("com.squareup.okhttp3:okhttp:4.8.0")
         implementation ("io.ktor:ktor-client-okhttp:$ktor_version")
         implementation("io.ktor:ktor-client-websockets-jvm:$ktor_version")
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0")
+        implementation("io.ktor:ktor-client-json-jvm:$ktor_version")
+        implementation("io.ktor:ktor-client-serialization-jvm:$ktor_version")
     }
 
     sourceSets["iosMain"].dependencies {
         implementation("io.ktor:ktor-client-ios:$ktor_version")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:1.3.8")
         implementation("io.ktor:ktor-client-websockets-native:$ktor_version")
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:0.20.0")
+        implementation("io.ktor:ktor-client-json-native:$ktor_version")
+        implementation("io.ktor:ktor-client-serialization-native:$ktor_version")
     }
 
     sourceSets["jsMain"].dependencies {
@@ -54,6 +64,9 @@ kotlin {
         implementation(kotlin("stdlib-js"))
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.8")
         implementation("io.ktor:ktor-client-websockets-js:$ktor_version")
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.20.0")
+        implementation("io.ktor:ktor-client-json-js:$ktor_version")
+        implementation("io.ktor:ktor-client-serialization-js:$ktor_version")
     }
 }
 
