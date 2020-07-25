@@ -32,6 +32,7 @@ android {
         exclude 'META-INF/ktor-client-core.kotlin_module'
         exclude 'META-INF/ktor-io.kotlin_module'
         exclude 'META-INF/ktor-http-cio.kotlin_module'
+        exclude 'META-INF/ktor-client-websockets.kotlin_module'
     }
 }
 
