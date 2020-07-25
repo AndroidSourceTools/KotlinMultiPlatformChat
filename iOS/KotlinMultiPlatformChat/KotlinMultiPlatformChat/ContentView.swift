@@ -9,20 +9,28 @@
 import SwiftUI
 import SharedCode
 
-final class Result: ObservableObject {
-    @Published var result: String = "loading"
-    func load() {
-        CommonKt.fetchRemoteMessage { (res: String) in
-            self.result = res
-        }
-    }
-}
-
 struct ContentView: View {
-    @ObservedObject var data = Result()
+    let chat = ChatService(host: "192.168.2.127", port: 8081, name: "iOSUser")
+    @State var messages = ""
+    @State var fieldText = ""
     var body: some View {
-        Text(data.result).onAppear {
-            self.data.load()
+        VStack {
+            Text(messages)
+            HStack {
+                TextField("Message",text: $fieldText)
+                Button("send", action: {
+                    self.chat.send(msg: self.fieldText)
+                    self.fieldText = ""
+                })
+            }.padding()
+        }.onAppear {
+            self.chat.onMessage = {msg in
+                self.messages += msg.user + ": " + msg.content + "\n"
+            }
+            self.chat.onReady = {
+                self.chat.send(msg: "iOS User Join")
+            }
+            self.chat.connect()
         }
     }
 }
