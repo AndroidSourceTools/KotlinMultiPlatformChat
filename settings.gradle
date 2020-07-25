@@ -2,5 +2,6 @@ rootProject.name='KotlinMultiPlatformChat'
 include ':app'
 include ':SharedCode'
 include ':js'
+include ':server'
 
 enableFeaturePreview('GRADLE_METADATA')
