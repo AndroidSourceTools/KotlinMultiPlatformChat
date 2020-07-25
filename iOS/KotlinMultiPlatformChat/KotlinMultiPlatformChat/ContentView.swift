@@ -16,6 +16,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             Text(messages)
+            Spacer()
             HStack {
                 TextField("Message",text: $fieldText)
                 Button("send", action: {
@@ -23,6 +24,7 @@ struct ContentView: View {
                     self.fieldText = ""
                 })
             }.padding()
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .bottomLeading)
         }.onAppear {
             self.chat.onMessage = {msg in
                 self.messages += msg.user + ": " + msg.content + "\n"

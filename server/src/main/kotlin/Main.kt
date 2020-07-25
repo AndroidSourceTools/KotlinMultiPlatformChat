@@ -97,8 +97,7 @@ class Room {
     suspend fun join(session: WebSocketServerSession) {
         sessions.add(session)
         session.run {
-            while (true) {
-                val frame = incoming.receiveOrNull() ?: break
+            for(frame in incoming) {
                 when (frame) {
                     is Frame.Text -> {
                         val msg = json.parse(Message.serializer(), frame.readText())
